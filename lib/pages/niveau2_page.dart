@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 
-class Niveau2_Page extends StatefulWidget {
-  const Niveau2_Page({super.key});
 
-  @override
-  State<Niveau2_Page> createState() => _AccueilPageState();
-}
 
 class _AccueilPageState extends State<Niveau2_Page> {
+
+
   //  LOGIQUE DU MOT
   List<String> lettresChoisies = [];
   int longueurMot = 3;  
   List<String> lettres = [
-    "I","O","L","R","N","X","S","Y"
+    "I","O","L","R",
+    "N","X","S","Y"
   ];
 
   void ajouterLettre(String l) {
@@ -145,57 +143,62 @@ class _AccueilPageState extends State<Niveau2_Page> {
               const SizedBox(height: 20),
 
               //     BOUTON SUPPRIMER
-              ElevatedButton(
-                onPressed: supprimerLettre,
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(150, 50),
-                  backgroundColor: Colors.red,
-                ),
-                child: const Text(
-                  "Supprimer",
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                ),
-              ),
-              GestureDetector(
-  onTap: () {
-    String motTape = lettresChoisies.join("");
+             Row(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: [
 
-    if (motTape == "ROI") {
-      // Mot correct → aller au niveau suivant
-      Navigator.push(
-        context,
-       MaterialPageRoute(builder: (context) => const Niveau2_Page()),
-
-      );
-    } else {
-      // Mot incorrect → message d'erreur
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Mot incorrect ! Réessaye."),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  },
-  child: Container(
-    margin: const EdgeInsets.only(top: 20),
-    width: 180,
-    height: 50,
-    decoration: BoxDecoration(
-      color: Colors.green,
-      borderRadius: BorderRadius.circular(12),
+    ElevatedButton(
+      onPressed: supprimerLettre,
+      style: ElevatedButton.styleFrom(
+        minimumSize: const Size(150, 50),
+        backgroundColor: Colors.red,
+      ),
+      child: const Text(
+        "Supprimer",
+        style: TextStyle(fontSize: 18,  color: Colors.white),
+      ),
     ),
-    child: const Center(
-      child: Text(
-        "VALIDER",
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
+
+    const SizedBox(width: 20), // espace entre les boutons
+
+    GestureDetector(
+      onTap: () {
+        String motTape = lettresChoisies.join("");
+        if (motTape == "SPORT") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Niveau2_Page()),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Mot incorrect ! Réessaye."),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+      child: Container(
+        width: 180,
+        height: 50,
+        decoration: BoxDecoration(
+          color: Colors.green,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: const Center(
+          child: Text(
+            "VALIDER",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
         ),
       ),
     ),
-  ),
+
+  ],
 ),
 
             ],
@@ -209,7 +212,12 @@ class _AccueilPageState extends State<Niveau2_Page> {
 }
 
 
+class Niveau2_Page extends StatefulWidget {
+  const Niveau2_Page({super.key});
 
+  @override
+  State<Niveau2_Page> createState() => _AccueilPageState();
+}
 
 /// Fonction top-level pour afficher une image stylisée
 Widget imageBox(String path) {
@@ -217,7 +225,7 @@ Widget imageBox(String path) {
     width: 160,
     height: 120,
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(8),
       color: Colors.white,
       image: DecorationImage(
         image: AssetImage(path),

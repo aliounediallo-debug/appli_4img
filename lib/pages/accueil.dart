@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:appli_4images/pages/niveau2_page.dart';
 
-class AccueilPage extends StatefulWidget {
-  const AccueilPage({super.key});
 
-  @override
-  State<AccueilPage> createState() => _AccueilPageState();
-}
 
 class _AccueilPageState extends State<AccueilPage> {
-  //  LOGIQUE DU MOT 
+  //  LOGIQUE DU MOT
+
   List<String> lettresChoisies = [];
-  int longueurMot = 5;  
+  int longueurMot = 5;
   List<String> lettres = [
-    "I","P","L","R","N","A","S","E","L","O","T","X"
+    "I","P","L","R","N","A",
+    "S","E","L","O","T","X"
   ];
 
   void ajouterLettre(String l) {
-    if (lettresChoisies.length < longueurMot) {
+    if (lettresChoisies.length < 5) {
       setState(() {
         lettresChoisies.add(l);
       });
@@ -28,6 +25,13 @@ class _AccueilPageState extends State<AccueilPage> {
     if (lettresChoisies.isNotEmpty) {
       setState(() {
         lettresChoisies.removeLast();
+      });
+    }
+  }
+  void supprimerTout() {
+    if (lettresChoisies.isNotEmpty) {
+      setState(() {
+        lettresChoisies= [];
       });
     }
   }
@@ -54,10 +58,11 @@ class _AccueilPageState extends State<AccueilPage> {
       ),
 
       body: 
+          
         SingleChildScrollView(
-        child: Padding(
+        child: Container(
           padding: const EdgeInsets.all(16.0),
-
+          margin:  EdgeInsets.only(bottom: 50),
           child: Column(
             children: [
               //      4 IMAGES
@@ -68,25 +73,23 @@ class _AccueilPageState extends State<AccueilPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    Wrap(
+                      spacing: 20,
+                      runSpacing: 12,
                       children: [
                         imageBox("img/basket.jpg"),
                         imageBox("img/box.jpg"),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
                         imageBox("img/course.jpg"),
                         imageBox("img/foot.jpg"),
+
                       ],
                     ),
+
                   ],
                 ),
               ),
 
-              const SizedBox(height: 25),
+
 
               
               //  ZONE DE SAISIE DU MOT
@@ -94,7 +97,7 @@ class _AccueilPageState extends State<AccueilPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(longueurMot, (index) {
                   return Container(
-                    margin: const EdgeInsets.all(5),
+                    margin: const EdgeInsets.all(5), 
                     width: 45,
                     height: 45,
                     decoration: BoxDecoration(
@@ -117,91 +120,105 @@ class _AccueilPageState extends State<AccueilPage> {
                 }),
               ),
 
-              const SizedBox(height: 20),
+
 
             
               //     LETTRES
-              Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: lettres.map((lettre) {
-                  return ElevatedButton(
-                    onPressed: () => ajouterLettre(lettre),
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(55, 55),
-                      backgroundColor: Colors.white,
-                    ),
-                    child: Text(
-                      lettre,
-                      style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
-                    ),
-                  );
-                }).toList(),
+              Container(
+                margin: EdgeInsets.only(top: 25, bottom: 25),
+                child: Wrap(
+                  spacing: 10,
+                  runSpacing: 10,
+                  children: lettres.map((lettre) {
+                    return ElevatedButton(
+                      onPressed: () => ajouterLettre(lettre),
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(10, 20),
+                        backgroundColor: Colors.white,
+                      ),
+
+                        child: Text(
+                          lettre,
+                          style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        ),
+                      );
+
+                  }).toList(),
+                ),
               ),
 
-              const SizedBox(height: 20),
+
 
               //     BOUTON SUPPRIMER
-             Row(
-  mainAxisAlignment: MainAxisAlignment.center,
-  children: [
+            Container(
 
-    ElevatedButton(
-      onPressed: supprimerLettre,
-      style: ElevatedButton.styleFrom(
-        minimumSize: const Size(150, 50),
-        backgroundColor: Colors.red,
-      ),
-      child: const Text(
-        "Supprimer",
-        style: TextStyle(fontSize: 18, color: Colors.white),
-      ),
-    ),
+              child: Wrap(
+                spacing: 10,
+                runAlignment: WrapAlignment.center,
+                runSpacing: 10,
+                children: [
 
-    const SizedBox(width: 20), // espace entre les boutons
+                  ElevatedButton(
+                    onPressed: supprimerLettre,
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(150, 50),
+                      backgroundColor: Colors.red,
+                    ),
+                    child: const Text(
+                      "Supprimer",
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+                  ),
+                  ElevatedButton(onPressed: supprimerTout,
+                    child: const Text(
+                      "Vider",
+                      style: TextStyle(fontSize: 18, color: Colors.blue),
+                    ),),
 
-    GestureDetector(
-      onTap: () {
-        String motTape = lettresChoisies.join("");
-        if (motTape == "SPORT") {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const Niveau2_Page()),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Mot incorrect ! Réessaye."),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      },
-      child: Container(
-        width: 180,
-        height: 50,
-        decoration: BoxDecoration(
-          color: Colors.green,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: const Center(
-          child: Text(
-            "VALIDER",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-    ),
+                  GestureDetector(
+                    onTap: () {
+                      String motTape = lettresChoisies.join("");
+                      if (motTape == "SPORT") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Niveau2_Page()),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Mot incorrect ! Réessayez."),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    },
+                    child: Container(
+                      width: 180,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "VALIDER",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
 
-  ],
-)
+                ],
+              ) ,
+            )
+
 
 
             ],
@@ -214,7 +231,12 @@ class _AccueilPageState extends State<AccueilPage> {
   }
 }
 
+class AccueilPage extends StatefulWidget {
+  const AccueilPage({super.key});
 
+  @override
+  State<AccueilPage> createState() => _AccueilPageState();
+}
 
 
 /// Fonction top-level pour afficher une image stylisée
